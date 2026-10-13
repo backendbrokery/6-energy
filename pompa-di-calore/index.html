@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--
+    PRIMA DI PUBBLICARE: compilare i placeholder {{...}} (trova/sostituisci sulla cartella pompa-di-calore/),
+    il form GHL va ancora inserito (vedi blocco FORM).
+    Testi: documento "LANDING L2 — POMPA DI CALORE SENZA UNITÀ ESTERNA". I blocchi segnati ⚠️ COMPLIANCE non vanno pubblicati finché non sono compilati.
+  -->
+
+  <script src="/js/bs-tracking.js"></script>
+
+  <!-- Google Tag Manager: incollare qui lo snippet <head> del contenitore GTM ({{GTM_ID}}) -->
+
+  <title>Pompa di calore senza unità esterna — Prenota il sopralluogo | Sei Energy</title>
+  <meta name="description" content="Caldaia a condensazione e pompa di calore nello stesso involucro: nessuna unità esterna sulla facciata, funziona con i termosifoni esistenti. Sopralluogo senza impegno.">
+  <meta property="og:title" content="Pompa di calore senza unità esterna — Sei Energy">
+  <meta property="og:description" content="Caldaia a condensazione e pompa di calore nello stesso involucro: nessuna unità esterna sulla facciata, funziona con i termosifoni esistenti. Sopralluogo senza impegno.">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#2A2C30">
+  <link rel="preload" as="image" href="/assets/pompa-hero-interno.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#2A2C30',
+            primary: '#1688BA',
+            paper: '#f8fafc'
+          },
+          fontFamily: { brand: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .reveal-delay-1 {
+      transition-delay: 0.10s;
+    }
+
+    .reveal-delay-2 {
+      transition-delay: 0.20s;
+    }
+
+    .reveal-delay-3 {
+      transition-delay: 0.30s;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .ghost-num {
+      font-size: clamp(72px, 11vw, 140px);
+      line-height: 0.85;
+      font-weight: 900;
+      color: rgba(42, 44, 48, 0.07);
+      user-select: none;
+      pointer-events: none;
+      flex-shrink: 0;
+      min-width: clamp(80px, 10vw, 140px);
+      text-align: right;
+      white-space: nowrap;
+      overflow-wrap: normal;
+    }
+
+    .ghost-num-light {
+      color: rgba(248, 250, 252, 0.07);
+    }
+
+    .row-divide {
+      border-top: 1px solid rgba(42, 44, 48, 0.10);
+    }
+
+    .row-divide-light {
+      border-top: 1px solid rgba(248, 250, 252, 0.10);
+    }
+
+    .row-divide:last-child {
+      border-bottom: 1px solid rgba(42, 44, 48, 0.10);
+    }
+
+    .row-divide-light:last-child {
+      border-bottom: 1px solid rgba(248, 250, 252, 0.10);
+    }
+
+    .btn-primary {
+      background: #1688BA;
+      color: #f8fafc;
+      border-radius: 4px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details[open] .faq-chevron {
+      transform: rotate(180deg);
+    }
+
+    .check {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: rgba(26, 162, 218, 0.18);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .check-light {
+      background: rgba(26, 162, 218, 0.10);
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid rgba(42, 44, 48, 0.10);
+      border-radius: 6px;
+    }
+
+    /* Hero: su desktop sta in una schermata, barra fissa (4rem) compresa */
+    @media (min-width: 1024px) {
+      .hero-fit {
+        height: calc(100vh - 4rem);
+        height: calc(100svh - 4rem);
+        min-height: 540px;
+        max-height: 780px;
+      }
+    }
+
+    /* Mappa in toni di grigio chiari, come la vecchia base CARTO "light" */
+    #map-zone .leaflet-tile-pane { filter: grayscale(1) brightness(1.06) contrast(0.88); }
+
+    .leaflet-zone-tooltip {
+      background: #2A2C30;
+      color: #f8fafc;
+      border: none;
+      border-radius: 3px;
+      font-family: Inter, sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 8px;
+      box-shadow: none;
+    }
+
+    .leaflet-zone-tooltip::before {
+      border-top-color: #2A2C30;
+    }
+
+    /* HERO comune */
+    @media (min-width: 1024px) {
+      .hero-split { min-height: 640px; min-height: min(100svh, 860px); }
+    }
+    .hero-check { width: 22px; height: 22px; border-radius: 4px; background: #1688BA; display: inline-flex;
+      align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    /* Evidenziatore: banda blu morbida sulla metà bassa della parola */
+    .hl { background-image: linear-gradient(transparent 66%, var(--hl, rgba(26, 162, 218, 0.45)) 66%, var(--hl, rgba(26, 162, 218, 0.45)) 90%, transparent 90%);
+      padding: 0 0.04em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+    .hl-dark { --hl: rgba(26, 162, 218, 0.85); }
+    /* Banda sottile in basso: segnala il passaggio senza coprire le lettere */
+    p .hl, li .hl { background-image: linear-gradient(transparent 62%, var(--hl, rgba(26, 162, 218, 0.45)) 62%, var(--hl, rgba(26, 162, 218, 0.45)) 96%, transparent 96%); }
+    /* Hero pompa: foto apparecchio aperto + infografica */
+    .hr-photo { position:relative; margin:0; aspect-ratio:1/1; border-radius:14px; box-shadow:0 30px 70px rgba(0,0,0,0.40); }
+    .hr-photo > img, .hr-photo > svg { border-radius:14px; }
+    .hr-tag { position:absolute; z-index:2; display:flex; align-items:center; gap:9px; width:max-content; padding:7px 11px 7px 7px; border-radius:12px;
+      background:rgba(42, 44, 48,0.88); border:1px solid rgba(255,255,255,0.18); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+      color:rgba(248,250,252,0.80); font-size:12.5px; line-height:1.2; box-shadow:0 10px 24px rgba(0,0,0,0.30); }
+    .hr-tag strong { display:block; color:#ffffff; font-size:14px; font-weight:800; }
+    .hr-tag-ico { flex-shrink:0; width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; background:var(--tag); color:#fff; }
+    .hr-tag-hot { left:3%; bottom:3%; max-width:40%; }
+    .hr-tag-cold { right:3%; top:3%; max-width:40%; }
+    .hr-out { position:absolute; z-index:2; right:-4%; bottom:-6%; width:31%; padding:4px; border-radius:12px; background:#ffffff; box-shadow:0 18px 40px rgba(0,0,0,0.50); }
+    .hr-out img { display:block; width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:8px 8px 4px 4px; }
+    .hr-out span { display:flex; align-items:center; gap:5px; margin-top:4px; padding:5px 7px; border-radius:4px 4px 8px 8px; background:#5E8E25; font-size:12px; font-weight:800; line-height:1.15; color:#ffffff; }
+    @media (max-width: 480px) { .hr-tag { font-size:10.5px; gap:6px; padding:5px 7px 5px 5px; } .hr-tag strong { font-size:12px; } .hr-tag-ico { width:24px; height:24px; } .hr-tag-hot, .hr-tag-cold { max-width:44%; } .hr-out { width:34%; right:-2%; bottom:-5%; } .hr-out span { font-size:10px; padding:4px 5px; } }
+  </style>
+</head>
+
+<body class="font-brand pb-16 md:pb-0" style="background:#f8fafc; color:#2A2C30; overflow-wrap:anywhere;">
+
+  <!-- Google Tag Manager (noscript): incollare qui lo snippet <body> del contenitore GTM ({{GTM_ID}}) -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+      }, { threshold: 0.06 });
+      document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+
+
+    });
+  </script>
+
+  <!-- BLOCCO 1 — BARRA FISSA -->
+  <header class="fixed top-0 left-0 right-0 z-50" style="background:#ffffff; box-shadow:0 1px 0 rgba(42, 44, 48,0.10);">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+      <div class="flex items-center justify-between gap-4 h-16 md:h-20">
+        <a href="#" class="flex items-center gap-3 md:gap-4 min-w-0">
+          <img src="/assets/logo.webp" alt="Sei Energy" width="865" height="160" class="h-7 md:h-9 w-auto flex-shrink-0">
+          <span class="min-w-0 leading-tight">
+            <span class="block text-xs sm:text-sm font-bold tracking-wide uppercase truncate" style="color:#2A2C30;">
+              Caldaia ibrida con pompa di calore senza unità esterna</span>
+            <!-- ⚠️ COMPLIANCE: niente cifre (TAN, TAEG, importi di rata) senza esempio rappresentativo e dati dell'intermediario -->
+            <span class="hidden sm:block text-xs truncate" style="color:rgba(42, 44, 48,0.55);">
+              Sopralluogo senza impegno · Pagamento anche rateale · {{TELEFONO}}</span>
+          </span>
+        </a>
+        <div class="flex items-center gap-3 flex-shrink-0">
+          <a href="tel:{{TELEFONO}}" data-cta="header" class="hidden lg:inline-block text-sm font-bold"
+            style="color:#2A2C30;">{{TELEFONO}}</a>
+          <a href="#form" class="btn-primary hidden md:inline-block text-sm font-bold px-5 py-2.5 uppercase tracking-wide">Prenota
+            il sopralluogo</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BLOCCO 2 — HERO: domanda, prodotto (immagine ufficiale Sime), due azioni -->
+  <section class="relative overflow-hidden" style="background:linear-gradient(135deg, #24272C 0%, #1C3B4E 50%, #0F6E97 100%);">
+    <div class="absolute pointer-events-none hidden lg:block" style="right:-10%; top:50%; transform:translateY(-50%); width:760px; height:760px; border-radius:50%; background:radial-gradient(circle, rgba(248,250,252,0.10) 0%, rgba(248,250,252,0) 65%);"></div>
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-10 pt-24 md:pt-28 pb-14 lg:pt-32 lg:pb-20 grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      <div class="lg:col-span-6">
+        <p class="inline-flex flex-wrap items-center gap-x-3 gap-y-2 mb-7 pl-4 pr-3 py-2" style="font-size:clamp(17px,1.7vw,22px); font-weight:600; color:#ffffff; background:rgba(248,250,252,0.08); border:1px solid rgba(248,250,252,0.18); border-radius:12px;">
+          <span>Installiamo la <strong class="font-black" style="color:#A1DAF8;">Hybrid Revolution</strong> di</span>
+          <img src="/assets/sime-logo.svg" alt="Sime" width="215" height="77" class="h-9 sm:h-11 w-auto" style="clip-path:inset(0 0 20% 0); margin-bottom:-8px;">
+        </p>
+        <h1 class="font-black tracking-tight mb-5" style="font-size:clamp(28px,3vw,44px); line-height:1.08; color:#ffffff;">
+          Vuoi installare una caldaia ibrida ma <span class="hl hl-dark">non puoi mettere</span> una pompa di calore all’esterno?
+        </h1>
+        <h2 class="leading-snug mb-8" style="font-size:clamp(17px,1.6vw,21px); font-weight:500; color:rgba(248,250,252,0.80); max-width:560px;">
+          Ti presentiamo <strong style="color:#ffffff;">Sime Hybrid Revolution</strong>: pompa di calore e caldaia in un unico apparecchio. Fuori, solo due griglie.
+        </h2>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a href="#form" data-cta="hero" class="inline-flex items-center justify-center font-bold px-7 py-4 transition-opacity hover:opacity-90" style="background:#1688BA; color:#f8fafc; border-radius:6px;">Prenota il sopralluogo</a>
+          <a href="tel:{{TELEFONO}}" data-cta="hero-telefono" class="inline-flex items-center justify-center gap-2 font-bold px-7 py-4 transition-opacity hover:opacity-90" style="background:#5E8E25; color:#f8fafc; border-radius:6px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" /></svg> {{TELEFONO}}</a>
+        </div>
+        <p class="text-sm mt-4" style="color:rgba(248,250,252,0.55);">Funziona con i termosifoni che hai già</p>
+      </div>
+      <div class="lg:col-span-6 relative">
+        <figure class="hr-photo" role="img" aria-label="Sime Hybrid Revolution aperta: a sinistra la caldaia a condensazione, a destra la pompa di calore, nello stesso apparecchio. Fuori servono solo due griglie">
+          <img src="/assets/pompa-hero-interno.webp" alt="" width="1008" height="1008" fetchpriority="high" decoding="async" class="absolute inset-0 w-full h-full object-cover">
+          <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1008 1008" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <filter id="hrGlowHot" x="-30%" y="-30%" width="160%" height="160%"><feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/><feGaussianBlur in="d" stdDeviation="8" result="b"/><feFlood flood-color="#ff6a4d" flood-opacity="1"/><feComposite in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <filter id="hrGlowCold" x="-30%" y="-30%" width="160%" height="160%"><feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/><feGaussianBlur in="d" stdDeviation="8" result="b"/><feFlood flood-color="#5fb8ff" flood-opacity="1"/><feComposite in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <path d="M242,212 Q242,196 258,195 L462,181 Q478,180 478,196 L478,790 Q478,806 462,806 L258,800 Q242,800 242,784 Z" fill="rgba(217,71,43,0.22)"/>
+            <path d="M242,212 Q242,196 258,195 L462,181 Q478,180 478,196 L478,790 Q478,806 462,806 L258,800 Q242,800 242,784 Z" fill="none" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" filter="url(#hrGlowHot)"/>
+            <path d="M490,180 Q490,164 506,163 L710,149 Q726,148 726,164 L726,798 Q726,814 710,814 L506,808 Q490,808 490,792 Z" fill="rgba(23,115,201,0.24)"/>
+            <path d="M490,180 Q490,164 506,163 L710,149 Q726,148 726,164 L726,798 Q726,814 710,814 L506,808 Q490,808 490,792 Z" fill="none" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" filter="url(#hrGlowCold)"/>
+          </svg>
+          <span class="hr-tag hr-tag-hot" style="--tag:#D9472B;"><span class="hr-tag-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c4 0 7-2.7 7-6.6 0-4.4-3.6-6.6-5-11.4-2.2 2-3 4.4-3 6.6-1-.6-1.8-1.6-2.2-2.8C7 9.6 5 12.2 5 15.4 5 19.3 8 22 12 22z"/></svg></span><span><strong>Caldaia</strong>a condensazione, per i giorni più freddi</span></span>
+          <span class="hr-tag hr-tag-cold" style="--tag:#1773C9;"><span class="hr-tag-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.6"/><path d="M12 10.4C11 6.5 12.5 3 15 3.4c2.4.4 2 4.2-1.6 7.2M13.4 12.8c3.8 1.4 5.9 4.6 4.3 6.5-1.6 1.8-4.6-.5-5.2-5M10.6 12.9C7.4 15.4 3.6 15.3 3.2 12.8c-.3-2.4 3.4-3.3 7.1-1"/></svg></span><span><strong>Pompa di calore</strong>recupera anche il calore dei fumi</span></span>
+          <span class="hr-out">
+            <img src="/assets/sime-hr-griglie.webp" alt="" width="500" height="420" loading="lazy" decoding="async">
+            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M20 6L9 17l-5-5"/></svg>Fuori: solo due griglie</span>
+          </span>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCCO 3 — IL PROBLEMA CHE RISOLVE -->
+  <section id="problema" class="py-20 md:py-24" style="background:#f8fafc;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-7">
+        <p class="reveal text-xs font-semibold tracking-widest uppercase mb-6" style="color:#1688BA;">Il problema che risolve</p>
+        <div class="mb-10">
+          <p class="reveal font-bold tracking-tight py-4 row-divide" style="font-size:clamp(20px,2.6vw,30px);">"Il condominio non me la fa mettere."</p>
+          <p class="reveal reveal-delay-1 font-bold tracking-tight py-4 row-divide" style="font-size:clamp(20px,2.6vw,30px);">"La Soprintendenza non autorizza niente in facciata."</p>
+          <p class="reveal reveal-delay-2 font-bold tracking-tight py-4 row-divide" style="font-size:clamp(20px,2.6vw,30px);">"Non ho un balcone dove metterla."</p>
+          <p class="reveal reveal-delay-3 font-bold tracking-tight py-4 row-divide" style="font-size:clamp(20px,2.6vw,30px);">"Non voglio quel coso appeso al muro."</p>
+        </div>
+        <div class="reveal space-y-5 text-lg leading-relaxed" style="color:rgba(42, 44, 48,0.75); max-width:640px;">
+          <p>Sono i quattro motivi per cui migliaia di famiglie restano con una caldaia da vent'anni pur volendo cambiare.</p>
+          <p class="pt-5 font-semibold" style="color:#2A2C30; border-top:2px solid #1688BA;">La risposta esiste, ed è
+            semplice: una pompa di calore che sta dentro l'involucro della caldaia. Non serve chiedere il permesso per una
+            cosa che non si vede.</p>
+        </div>
+      </div>
+      <div class="lg:col-span-5 reveal reveal-delay-1 h-80 lg:h-[520px] overflow-hidden" style="border-radius:6px;">
+        <img src="/assets/pompa-problema.webp" alt="Facciata di un palazzo storico rovinata da tante unità esterne di climatizzatori e tubi" width="900"
+          height="1125" loading="lazy" decoding="async" class="w-full h-full object-cover">
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCCO 4 — COME FUNZIONA -->
+  <section id="come-funziona" class="py-20 md:py-24" style="background:#ffffff; border-top:1px solid rgba(42, 44, 48,0.07);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="reveal mb-14">
+        <p class="text-xs font-semibold tracking-widest uppercase mb-4" style="color:#1688BA;">Come funziona</p>
+        <h2 class="font-black tracking-tight leading-tight" style="font-size:clamp(30px,4.5vw,56px); color:#2A2C30; max-width:760px;">
+          Due generatori in un solo apparecchio.
+        </h2>
+        <p class="mt-6 text-lg leading-relaxed" style="color:rgba(42, 44, 48,0.65); max-width:680px;">Dentro il mantello ci sono una caldaia a condensazione e una pompa di calore aria-acqua da 4 kW termici. Lavorano in serie: la pompa di calore fa il preriscaldo, la caldaia copre il resto.</p>
+      </div>
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="reveal card p-8">
+          <p class="text-xs font-semibold tracking-widest uppercase mb-4" style="color:#1688BA;">Il doppio evaporatore</p>
+          <div class="space-y-4 text-base leading-relaxed" style="color:rgba(42, 44, 48,0.75);">
+            <p>Il primo evaporatore preleva calore dall'aria, come qualunque pompa di calore. Il secondo recupera l'energia
+              residua contenuta nei fumi della combustione.</p>
+            <p>Per questo l'efficienza della pompa di calore rimane pressoché costante al variare della temperatura
+              esterna. In pratica rende anche quando fuori fa freddo, che è il momento in cui una pompa di calore normale
+              rende di meno.</p>
+            <p class="p-4 font-semibold" style="background:#f1f4f8; border-left:3px solid #1688BA; color:#2A2C30;">Il dato
+              che lo dimostra: i fumi escono dall'apparecchio a circa 10 gradi. Di solito i fumi di una caldaia escono
+              molto più caldi. Quel calore, qui, non va nell'aria: torna dentro.</p>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1 card overflow-hidden flex flex-col">
+          <div class="h-64 md:h-80 overflow-hidden">
+            <img src="/assets/pompa-generatori.webp" alt="L’apparecchio aperto: a sinistra la caldaia a condensazione, a destra la pompa di calore, con i due tubi dell’aria" width="1400"
+              height="747" loading="lazy" decoding="async" class="w-full h-full object-cover">
+          </div>
+          <div class="p-8">
+            <p class="text-xs font-semibold tracking-widest uppercase mb-4" style="color:#1688BA;">L'aria da dove arriva</p>
+            <p class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.75);">Da due tubazioni da 16 centimetri, come
+              quelle di un climatizzatore monoblocco. Se l'apparecchio è installato all'interno servono due fori sul muro
+              perimetrale. Se va su un balcone coperto o in luogo parzialmente protetto, non servono nemmeno quelli.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCCO 5 — I TERMOSIFONI -->
+  <section class="py-20 md:py-24" style="background:#f8fafc;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-5 order-2 lg:order-1 reveal h-80 lg:h-[480px] overflow-hidden" style="border-radius:6px;">
+        <img src="/assets/pompa-termosifoni.webp" alt="Mani che si scaldano su un vecchio termosifone in ghisa sotto la finestra" width="900" height="1125" loading="lazy"
+          decoding="async" class="w-full h-full object-cover">
+      </div>
+      <div class="lg:col-span-7 order-1 lg:order-2">
+      <div class="reveal mb-14">
+        <p class="text-xs font-semibold tracking-widest uppercase mb-4" style="color:#1688BA;">I termosifoni</p>
+        <h2 class="font-black tracking-tight leading-tight" style="font-size:clamp(30px,4.5vw,56px); color:#2A2C30; max-width:760px;">
+          "Ma con i termosifoni vecchi una pompa di calore non funziona."
+        </h2>
+      </div>
+        <div class="reveal space-y-5 text-lg leading-relaxed" style="color:rgba(42, 44, 48,0.75);">
+          <p>È vero per le pompe di calore normali, ed è il motivo per cui a molta gente viene detto che deve rifare tutto
+            l'impianto.</p>
+          <div class="p-6 md:p-7" style="background:linear-gradient(135deg, #24272C 0%, #2C3D24 50%, #4F7A1F 100%); border-left:6px solid #1688BA; border-radius:10px; box-shadow:0 16px 36px rgba(42, 44, 48,0.20);">
+            <p class="text-xs font-semibold tracking-widest uppercase mb-3" style="color:#86B43F;">Qui è diverso, per una ragione tecnica precisa</p>
+            <p class="font-bold" style="font-size:clamp(19px,1.9vw,24px); line-height:1.35; color:#f8fafc;">La pompa di calore è idraulicamente <span class="hl hl-dark">in serie alla caldaia</span>.
+              Questo consente un preriscaldo ad alta efficienza anche con le temperature di mandata elevate, tipiche dei radiatori esistenti.</p>
+          </div>
+          <p class="text-2xl font-black" style="color:#2A2C30;">Tradotto: i tuoi termosifoni restano dove sono.</p>
+          <p class="text-base">Non vale per ogni impianto e per ogni casa — lo verifichiamo in sopralluogo prima di
+            prometterti qualunque cosa. Ma nella maggior parte delle case con radiatori è esattamente la soluzione giusta.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCCO 6 — INCENTIVI (⚠️ nessuna percentuale né cifra finché il commercialista non ha istruito questo caso) -->
+  <section class="py-20 md:py-24" style="background:linear-gradient(135deg, #24272C 0%, #2C3D24 50%, #4F7A1F 100%);">
+    <div class="max-w-4xl mx-auto px-6 lg:px-10">
+      <div class="reveal mb-14">
+        <p class="text-xs font-semibold tracking-widest uppercase mb-4" style="color:rgba(248,250,252,0.45);">Incentivi</p>
+        <h2 class="font-black tracking-tight leading-tight" style="font-size:clamp(30px,4.5vw,56px); color:#f8fafc; max-width:760px;">
+          Perché questo apparecchio rientra fra gli interventi agevolabili e una caldaia a gas no.
+        </h2>
+      </div>
+      <div class="reveal space-y-5 text-lg leading-relaxed" style="color:rgba(248,250,252,0.70);">
+        <p class="text-xl font-semibold p-6" style="color:#f8fafc; background:rgba(248,250,252,0.05); border-left:3px solid #1688BA;">
+          Le caldaie alimentate esclusivamente a combustibili fossili non rientrano più fra gli interventi agevolati.
+          I sistemi ibridi e le pompe di calore sì.</p>
+        <p>Questo è un sistema ibrido: caldaia a condensazione e pompa di calore integrate in un unico apparecchio.</p>
+        <p>Nel 2026 un sistema ibrido può accedere alla detrazione fiscale del 50% sulla prima casa (36% sulle altre abitazioni), recuperata in 10 anni, oppure al Conto Termico 3.0 del GSE, che rimborsa una parte della spesa direttamente sul conto corrente. Le due strade non si sommano: si sceglie quella più conveniente per te.</p>
+        <p>In sopralluogo ti diciamo quali agevolazioni puoi utilizzare nel tuo caso specifico, a quali condizioni e quali
+          documenti servono. Le pratiche le gestiamo noi. <span class="text-sm">Le agevolazioni dipendono dalla normativa in vigore al momento dei lavori e dai requisiti del tuo caso: le verifichiamo con te prima che tu firmi qualunque cosa.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCCO 7 — L'INSTALLAZIONE -->
+  <section id="installazione" class="py-20 md:py-24" style="background:#f8fafc;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="reveal mb-14">
+        <p class="text-xs font-semibold tracking-widest uppercase mb-4" style="color:#1688BA;">L'installazione</p>
+        <h2 class="font-black tracking-tight leading-tight" style="font-size:clamp(30px,4.5vw,56px); color:#2A2C30; max-width:760px;">
+          Si installa come una caldaia.<br>Perché di fatto è una caldaia.
+        </h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="reveal card p-7 sm:p-8">
+          <p class="text-xs font-semibold tracking-widest uppercase mb-6" style="color:#1688BA;">Cosa serve</p>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Gli attacchi acqua e gas che lascia liberi la vecchia caldaia</span></li>
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Un filtro defangatore e un dosatore di polifosfati</span></li>
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Il lavaggio dell'impianto, consigliato e in molti casi obbligatorio per legge</span></li>
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Due fori da 16 cm sul muro perimetrale, se l'apparecchio va all'interno</span></li>
+          </ul>
+        </div>
+        <div class="reveal reveal-delay-1 card p-7 sm:p-8" style="background:#f1f4f8;">
+          <p class="text-xs font-semibold tracking-widest uppercase mb-6" style="color:#2A2C30;">Cosa non serve</p>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Nessuna unità esterna</span></li>
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Nessuna opera in facciata</span></li>
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Nessuna autorizzazione condominiale per le parti comuni</span></li>
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Nessuna sostituzione dei radiatori, nella maggior parte dei casi</span></li>
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Nessun intervento sul circuito frigorifero: è sigillato di fabbrica</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="reveal mt-6 card p-7 sm:p-8">
+        <p class="text-xs font-semibold tracking-widest uppercase mb-3" style="color:#1688BA;">Dove può andare</p>
+        <p class="text-lg leading-relaxed" style="color:rgba(42, 44, 48,0.75);">All'interno, con i due fori. Oppure all'esterno
+          in luogo parzialmente protetto, per esempio un balcone coperto — e in quel caso i fori non servono.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCCO 9 — PER CHI È E PER CHI NON È -->
+  <section id="per-chi" class="py-20 md:py-24" style="background:#ffffff;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="reveal mb-14">
+        <p class="text-xs font-semibold tracking-widest uppercase mb-4" style="color:#1688BA;">Per chi è</p>
+        <h2 class="font-black tracking-tight leading-tight" style="font-size:clamp(30px,4.5vw,56px); color:#2A2C30; max-width:760px;">
+          Per chi è, e per chi non è.
+        </h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="reveal card p-7 sm:p-8">
+          <p class="text-xs font-semibold tracking-widest uppercase mb-6" style="color:#1688BA;">È la soluzione giusta se</p>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Vivi in condominio e l'unità esterna è un problema</span></li>
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">L'edificio ha vincoli architettonici o è in centro storico</span></li>
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Non hai spazio fuori, o non vuoi occuparlo</span></li>
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Hai radiatori e non vuoi rifare l'impianto</span></li>
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1688BA" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Vuoi più efficienza senza stravolgere niente</span></li>
+          </ul>
+        </div>
+        <div class="reveal reveal-delay-1 card p-7 sm:p-8" style="background:#f1f4f8;">
+          <p class="text-xs font-semibold tracking-widest uppercase mb-6" style="color:#2A2C30;">Non è la soluzione giusta se</p>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2A2C30" stroke-width="3.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Ti serve anche il raffrescamento estivo → guarda l'altra strada: <strong>riscaldamento e aria condizionata insieme</strong></span></li>
+            <li class="flex items-start gap-3"><span class="check check-light"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2A2C30" stroke-width="3.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg></span><span class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.80);">Stai costruendo o ristrutturando integralmente → con un impianto nuovo ci sono opzioni più efficienti, e te lo diciamo</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="reveal mt-10 text-lg font-semibold" style="max-width:720px;">Preferiamo dirti di no adesso che vendertela e sentirti scontento a giugno.</p>
+    </div>
+  </section>
+
+  <!-- BLOCCO 10 — I NUMERI (verificare con la scheda tecnica del modello e della taglia venduti davvero) -->
+  <section id="numeri" class="py-20 md:py-24" style="background:linear-gradient(225deg, #24272C 0%, #1C3B4E 50%, #0F6E97 100%);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="reveal mb-14">
+        <p class="text-xs font-semibold tracking-widest uppercase mb-4" style="color:rgba(248,250,252,0.45);">Scheda tecnica</p>
+        <h2 class="font-black tracking-tight leading-tight" style="font-size:clamp(30px,4.5vw,56px); color:#f8fafc; max-width:760px;">
+          I numeri.
+        </h2>
+      </div>
+      <div class="reveal grid md:grid-cols-2 md:gap-x-12">
+        <div class="py-5 flex items-start gap-4 row-divide-light"><span class="font-black flex-shrink-0" style="color:#86B43F;">01</span>
+          <span class="text-base leading-relaxed" style="color:rgba(248,250,252,0.80);">Caldaia a condensazione + pompa di calore aria-acqua da 4 kW termici</span></div>
+        <div class="py-5 flex items-start gap-4 row-divide-light"><span class="font-black flex-shrink-0" style="color:#86B43F;">02</span>
+          <span class="text-base leading-relaxed" style="color:rgba(248,250,252,0.80);">Classe di efficienza A++</span></div>
+        <div class="py-5 flex items-start gap-4 row-divide-light"><span class="font-black flex-shrink-0" style="color:#86B43F;">03</span>
+          <span class="text-base leading-relaxed" style="color:rgba(248,250,252,0.80);">Assorbimento elettrico della pompa di calore inferiore a 1 kW</span></div>
+        <div class="py-5 flex items-start gap-4 row-divide-light"><span class="font-black flex-shrink-0" style="color:#86B43F;">04</span>
+          <span class="text-base leading-relaxed" style="color:rgba(248,250,252,0.80);">Efficienza della pompa di calore pressoché costante al variare della temperatura esterna, grazie al recupero sul lato fumi</span></div>
+        <div class="py-5 flex items-start gap-4 row-divide-light"><span class="font-black flex-shrink-0" style="color:#86B43F;">05</span>
+          <span class="text-base leading-relaxed" style="color:rgba(248,250,252,0.80);">Temperatura dei fumi in uscita attorno ai 10 °C</span></div>
+        <div class="py-5 flex items-start gap-4 row-divide-light"><span class="font-black flex-shrink-0" style="color:#86B43F;">06</span>
+          <span class="text-base leading-relaxed" style="color:rgba(248,250,252,0.80);">Circuito frigorifero ermeticamente sigillato di fabbrica</span></div>
+        <div class="py-5 flex items-start gap-4 row-divide-light"><span class="font-black flex-shrink-0" style="color:#86B43F;">07</span>
+          <span class="text-base leading-relaxed" style="color:rgba(248,250,252,0.80);">Possibilità di scarico a parete</span></div>
+        <div class="py-5 flex items-start gap-4 row-divide-light"><span class="font-black flex-shrink-0" style="color:#86B43F;">08</span>
+          <span class="text-base leading-relaxed" style="color:rgba(248,250,252,0.80);">Regolazione climatica con sonda esterna</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCCO — DOVE OPERIAMO -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <section id="zone" class="py-20 md:py-24" style="background:#ffffff; border-top:1px solid rgba(42, 44, 48,0.07);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="reveal mb-14">
+        <p class="text-xs font-semibold tracking-widest uppercase mb-4" style="color:#1688BA;">Copertura territoriale</p>
+        <h2 class="font-black tracking-tight leading-tight" style="font-size:clamp(30px,4.5vw,56px); color:#2A2C30; max-width:760px;">
+          Dove operiamo oggi.
+        </h2>
+        <p class="mt-6 text-lg leading-relaxed" style="color:rgba(42, 44, 48,0.65); max-width:680px;">Siamo presenti in tutta la Toscana.</p>
+      </div>
+      <div class="reveal flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
+        <div class="flex-1 min-w-0">
+          <div class="mb-10">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:#1688BA;"></span>
+              <span class="text-xs font-semibold tracking-widest uppercase" style="color:#1688BA;">Toscana — tutte le province</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-4 py-2 font-semibold text-sm" style="background:#1688BA; color:#f8fafc; border-radius:4px;">Arezzo</span>
+              <span class="px-4 py-2 font-semibold text-sm" style="background:#1688BA; color:#f8fafc; border-radius:4px;">Firenze</span>
+              <span class="px-4 py-2 font-semibold text-sm" style="background:#1688BA; color:#f8fafc; border-radius:4px;">Grosseto</span>
+              <span class="px-4 py-2 font-semibold text-sm" style="background:#1688BA; color:#f8fafc; border-radius:4px;">Livorno</span>
+              <span class="px-4 py-2 font-semibold text-sm" style="background:#1688BA; color:#f8fafc; border-radius:4px;">Lucca</span>
+              <span class="px-4 py-2 font-semibold text-sm" style="background:#1688BA; color:#f8fafc; border-radius:4px;">Massa-Carrara</span>
+              <span class="px-4 py-2 font-semibold text-sm" style="background:#1688BA; color:#f8fafc; border-radius:4px;">Pisa</span>
+              <span class="px-4 py-2 font-semibold text-sm" style="background:#1688BA; color:#f8fafc; border-radius:4px;">Pistoia</span>
+              <span class="px-4 py-2 font-semibold text-sm" style="background:#1688BA; color:#f8fafc; border-radius:4px;">Prato</span>
+              <span class="px-4 py-2 font-semibold text-sm" style="background:#1688BA; color:#f8fafc; border-radius:4px;">Siena</span>
+            </div>
+          </div>
+          <p class="text-base leading-relaxed" style="color:rgba(42, 44, 48,0.65); max-width:520px;">
+            <strong style="color:#2A2C30;">Non trovi la tua zona?</strong> Chiamaci lo stesso al
+            <a href="tel:{{TELEFONO}}" data-cta="zone" class="font-semibold" style="color:#1688BA;">{{TELEFONO}}</a>: ti diciamo
+            subito se rientriamo o no.
+          </p>
+        </div>
+        <div class="flex-shrink-0 w-full lg:w-1/2" style="border-radius:4px; overflow:hidden; border:1px solid rgba(42, 44, 48,0.10);">
+          <div id="map-zone" style="height:420px; width:100%; position:relative; z-index:0;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    (function () {
+      function initMap() {
+        if (!window.L || !document.getElementById('map-zone')) return;
+        var map = L.map('map-zone', { zoomControl: true, scrollWheelZoom: false, attributionControl: true }).setView([43.35, 11.0], 7);
+        // Tile OpenStreetMap: gratuite, richiedono solo l'attribuzione (CARTO ora chiede una API key)
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 14, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' }).addTo(map);
+        var markerStyle = { radius: 9, fillColor: '#1688BA', color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.9 };
+        [
+          ['Arezzo', 43.463, 11.878], ['Firenze', 43.770, 11.256], ['Grosseto', 42.760, 11.113], ['Livorno', 43.548, 10.311],
+          ['Lucca', 43.843, 10.503], ['Massa-Carrara', 44.036, 10.143], ['Pisa', 43.723, 10.402], ['Pistoia', 43.933, 10.917],
+          ['Prato', 43.878, 11.102], ['Siena', 43.319, 11.331]
+        ].forEach(function (l) {
+          L.circleMarker([l[1], l[2]], markerStyle).addTo(map).bindTooltip(l[0], { direction: 'top', className: 'leaflet-zone-tooltip' });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMap); }
+      else { initMap(); }
+    })();
+  </script>
+
+  <!-- BLOCCO — FAQ -->
+  <section id="faq" class="py-20 md:py-24" style="background:#ffffff; border-top:1px solid rgba(42, 44, 48,0.07);">
+    <div class="max-w-4xl mx-auto px-6 lg:px-10">
+      <div class="reveal mb-14">
+        <p class="text-xs font-semibold tracking-widest uppercase mb-4" style="color:#1688BA;">FAQ</p>
+        <h2 class="font-black tracking-tight leading-tight" style="font-size:clamp(30px,4.5vw,56px); color:#2A2C30; max-width:760px;">
+          Le domande che ci fanno più spesso.
+        </h2>
+      </div>
+      <div class="reveal">
+        <details class="row-divide">
+          <summary class="cursor-pointer list-none flex items-start justify-between py-6 gap-8">
+            <span class="text-lg font-semibold">Fa rumore?</span>
+            <svg class="faq-chevron flex-shrink-0 mt-1 transition-transform duration-300" width="20" height="20"
+              viewBox="0 0 20 20" fill="none" stroke="#1688BA" stroke-width="1.8"><path d="M5 8l5 5 5-5" /></svg>
+          </summary>
+          <p class="pb-6 text-base leading-relaxed" style="color:rgba(42, 44, 48,0.70);">Poco. Secondo il produttore l'apparecchio lavora intorno ai 40 dB, più o meno il ronzio di un frigorifero: più silenzioso di molte vecchie caldaie a gas.</p>
+        </details>
+        <details class="row-divide">
+          <summary class="cursor-pointer list-none flex items-start justify-between py-6 gap-8">
+            <span class="text-lg font-semibold">Consuma molta corrente?</span>
+            <svg class="faq-chevron flex-shrink-0 mt-1 transition-transform duration-300" width="20" height="20"
+              viewBox="0 0 20 20" fill="none" stroke="#1688BA" stroke-width="1.8"><path d="M5 8l5 5 5-5" /></svg>
+          </summary>
+          <p class="pb-6 text-base leading-relaxed" style="color:rgba(42, 44, 48,0.70);">L'assorbimento elettrico della pompa di calore è inferiore a 1 kW, quindi nella grande maggioranza dei casi il contatore da 3 kW non va toccato. Lo verifichiamo comunque in sopralluogo.</p>
+        </details>
+        <details class="row-divide">
+          <summary class="cursor-pointer list-none flex items-start justify-between py-6 gap-8">
+            <span class="text-lg font-semibold">E quando fuori fa molto freddo?</span>
+            <svg class="faq-chevron flex-shrink-0 mt-1 transition-transform duration-300" width="20" height="20"
+              viewBox="0 0 20 20" fill="none" stroke="#1688BA" stroke-width="1.8"><path d="M5 8l5 5 5-5" /></svg>
+          </summary>
+          <p class="pb-6 text-base leading-relaxed" style="color:rgba(42, 44, 48,0.70);">È la domanda giusta, ed è il punto su cui questo apparecchio è diverso. Il recupero di calore sui fumi mantiene l'efficienza della pompa di calore pressoché costante anche al calare della temperatura esterna.</p>
+        </details>
+        <details class="row-divide">
+          <summary class="cursor-pointer list-none flex items-start justify-between py-6 gap-8">
+            <span class="text-lg font-semibold">I due fori da 16 cm rovinano il muro?</span>
+            <svg class="faq-chevron flex-shrink-0 mt-1 transition-transform duration-300" width="20" height="20"
+              viewBox="0 0 20 20" fill="none" stroke="#1688BA" stroke-width="1.8"><path d="M5 8l5 5 5-5" /></svg>
+          </summary>
+          <p class="pb-6 text-base leading-relaxed" style="color:rgba(42, 44, 48,0.70);">Sono come quelli di un climatizzatore monoblocco, e all'esterno si vedono due griglie. Se l'apparecchio va su un balcone coperto, i fori non servono affatto.</p>
+        </details>
+        <details class="row-divide">
+          <summary class="cursor-pointer list-none flex items-start justify-between py-6 gap-8">
+            <span class="text-lg font-semibold">Devo chiedere l'autorizzazione al condominio?</span>
+            <svg class="faq-chevron flex-shrink-0 mt-1 transition-transform duration-300" width="20" height="20"
+              viewBox="0 0 20 20" fill="none" stroke="#1688BA" stroke-width="1.8"><path d="M5 8l5 5 5-5" /></svg>
+          </summary>
+          <p class="pb-6 text-base leading-relaxed" style="color:rgba(42, 44, 48,0.70);">Per l'apparecchio in sé non c'è nulla sulle parti comuni. Il caso specifico lo verifichiamo insieme in sopralluogo.</p>
+        </details>
+        <details class="row-divide">
+          <summary class="cursor-pointer list-none flex items-start justify-between py-6 gap-8">
+            <span class="text-lg font-semibold">Raffresca d'estate?</span>
+            <svg class="faq-chevron flex-shrink-0 mt-1 transition-transform duration-300" width="20" height="20"
+              viewBox="0 0 20 20" fill="none" stroke="#1688BA" stroke-width="1.8"><path d="M5 8l5 5 5-5" /></svg>
+          </summary>
+          <p class="pb-6 text-base leading-relaxed" style="color:rgba(42, 44, 48,0.70);">No. Questo sistema fa riscaldamento e acqua calda. Se ti serve anche il fresco, la soluzione è un'altra: <strong>riscaldamento e aria condizionata insieme</strong>.</p>
+        </details>
+        <details class="row-divide">
+          <summary class="cursor-pointer list-none flex items-start justify-between py-6 gap-8">
+            <span class="text-lg font-semibold">Costa più di una caldaia normale?</span>
+            <svg class="faq-chevron flex-shrink-0 mt-1 transition-transform duration-300" width="20" height="20"
+              viewBox="0 0 20 20" fill="none" stroke="#1688BA" stroke-width="1.8"><path d="M5 8l5 5 5-5" /></svg>
+          </summary>
+          <p class="pb-6 text-base leading-relaxed" style="color:rgba(42, 44, 48,0.70);">Sì, come prezzo di acquisto. Ma è un sistema ibrido, quindi rientra fra gli interventi agevolabili mentre una caldaia a solo gas no, e consuma meno. In sopralluogo ti mettiamo i due numeri accanto così vedi la differenza reale.</p>
+        </details>
+        <details class="row-divide">
+          <summary class="cursor-pointer list-none flex items-start justify-between py-6 gap-8">
+            <span class="text-lg font-semibold">Si può pagare a rate?</span>
+            <svg class="faq-chevron flex-shrink-0 mt-1 transition-transform duration-300" width="20" height="20"
+              viewBox="0 0 20 20" fill="none" stroke="#1688BA" stroke-width="1.8"><path d="M5 8l5 5 5-5" /></svg>
+          </summary>
+          <p class="pb-6 text-base leading-relaxed" style="color:rgba(42, 44, 48,0.70);">Sì, con un finanziamento soggetto ad approvazione della società finanziaria. In sopralluogo ti mostriamo l'importo della rata accanto al prezzo pieno, così confronti entrambi.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCCO — CTA FINALE -->
+  <section class="py-20 md:py-24" style="background:#1688BA;">
+    <div class="max-w-4xl mx-auto px-6 lg:px-10 text-center">
+      <div class="reveal">
+        <h2 class="font-black tracking-tight leading-tight mb-10" style="font-size:clamp(32px,5vw,60px); color:#f8fafc;">
+          Niente sulla facciata, niente da chiedere al condominio.<br><span style="color:rgba(248,250,252,0.45);">Vieni a vederlo con i numeri davanti.</span>
+        </h2>
+        <a href="#form" data-cta="cta-finale"
+          class="inline-flex items-center justify-center font-black px-8 py-5 text-lg uppercase tracking-wide transition-opacity hover:opacity-90"
+          style="background:#f8fafc; color:#1688BA; border-radius:4px;">Prenota il sopralluogo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCCO — FORM -->
+  <section id="form" class="py-20" style="background:#f8fafc;">
+    <div class="max-w-3xl mx-auto px-6 lg:px-10">
+      <div class="reveal mb-10 text-center">
+        <h2 class="font-black tracking-tight mb-3" style="font-size:clamp(28px,4vw,40px);">Prenota il sopralluogo</h2>
+        <p class="text-base" style="color:rgba(42, 44, 48,0.65);">Ti richiamiamo il prima possibile negli orari di servizio: {{ORARI_REPERIBILITA}}.</p>
+      </div>
+      <div class="reveal mb-10">
+        <a href="tel:{{TELEFONO}}" data-cta="form"
+          class="flex flex-col sm:flex-row items-center justify-center gap-3 font-semibold px-8 py-6 transition-opacity hover:opacity-90 text-center"
+          style="background:#5E8E25; color:#f8fafc; border-radius:4px;">
+          <span class="flex items-center gap-3">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+            <span class="text-sm uppercase tracking-widest" style="color:rgba(248,250,252,0.70);">Telefono</span>
+          </span>
+          <span class="font-black" style="font-size:clamp(22px,3vw,30px);">{{TELEFONO}}</span>
+        </a>
+        <p class="flex items-center justify-center gap-2 text-sm mt-3" style="color:rgba(42, 44, 48,0.60);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          Reperibili {{ORARI_REPERIBILITA}}
+        </p>
+      </div>
+      <div class="reveal flex items-center gap-4 mb-10">
+        <div class="flex-1" style="border-top:1px solid rgba(42, 44, 48,0.12);"></div>
+        <span class="text-xs font-semibold tracking-widest uppercase" style="color:rgba(42, 44, 48,0.40);">Oppure compila il modulo</span>
+        <div class="flex-1" style="border-top:1px solid rgba(42, 44, 48,0.12);"></div>
+      </div>
+      <!-- FORM GHL: da inserire. Incollare l'iframe del form dentro #ghl-form, al posto di questo commento.
+           Redirect dopo l'invio: https://{{DOMINIO}}/pompa-di-calore/grazie/?lead=ok (fa scattare generate_lead)
+         Campi da configurare in GHL (documento, blocco CTA e form):
+         Nome* [testo] · Cellulare* [tel] · Email [email] · CAP* [numero]
+         Che tipo di casa?* [select]: Appartamento in condominio / Villetta o casa indipendente / Villetta a schiera / Altro
+         Quanti anni ha la caldaia attuale?* [select]: Meno di 5 / Da 5 a 10 / Da 10 a 15 / Più di 15 / Non lo so
+         Consenso (non pre-spuntato): Ho letto l'informativa privacy e acconsento al trattamento dei dati per essere ricontattato.*
+         Hai un vincolo per l'unità esterna? [select]: Sì, condominio / Sì, vincolo architettonico o centro storico / Sì, manca lo spazio / No, nessun vincolo -->
+      <div id="ghl-form" class="reveal" style="border:1px solid rgba(42, 44, 48,0.09); border-radius:4px; overflow:hidden; background:#ffffff; min-height:762px;">
+        <!-- iframe del form GHL -->
+      </div>
+      <!-- form_embed.js viene caricato da /js/bs-tracking.js (solo se in pagina c'è un iframe GHL) dopo aver aggiunto i parametri UTM -->
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background:linear-gradient(180deg, #2A2C30 0%, #1B2D38 100%);" class="py-16">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div>
+          <span class="inline-block mb-5 px-4 py-3" style="background:#ffffff; border-radius:8px;"><img src="/assets/logo.webp" alt="Sei Energy" width="865" height="160" loading="lazy" class="h-8 w-auto"></span>
+          <p class="text-sm leading-relaxed mb-6" style="color:rgba(248,250,252,0.50);">{{DESCRIZIONE_AZIENDA}}</p>
+        </div>
+        <div>
+          <p class="text-xs font-semibold tracking-widest uppercase mb-5" style="color:rgba(248,250,252,0.30);">Contatti</p>
+          <ul class="space-y-3">
+            <li>
+              <a href="tel:{{TELEFONO}}" data-cta="footer" class="text-sm transition-colors hover:text-white"
+                style="color:rgba(248,250,252,0.50);">
+                <span class="block text-xs" style="color:rgba(248,250,252,0.30);">Telefono</span>
+                {{TELEFONO}}
+              </a>
+            </li>
+            <li>
+              <a href="mailto:{{EMAIL}}" class="text-sm transition-colors hover:text-white"
+                style="color:rgba(248,250,252,0.50);">
+                <span class="block text-xs" style="color:rgba(248,250,252,0.30);">Email</span>
+                {{EMAIL}}
+              </a>
+            </li>
+            <li class="text-sm" style="color:rgba(248,250,252,0.50);">
+              <span class="block text-xs" style="color:rgba(248,250,252,0.30);">Reperibilità</span>
+              {{ORARI_REPERIBILITA}}
+            </li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-xs font-semibold tracking-widest uppercase mb-5" style="color:rgba(248,250,252,0.30);">Servizi</p>
+          <ul class="space-y-3">
+            <li><a href="/pompa-di-calore/" class="text-sm transition-colors hover:text-white" style="color:rgba(248,250,252,0.50);">Pompa di calore senza unità esterna</a></li>
+            <li><a href="/riscaldamento-e-aria-condizionata/" class="text-sm transition-colors hover:text-white" style="color:rgba(248,250,252,0.50);">Riscaldamento e aria condizionata</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-xs font-semibold tracking-widest uppercase mb-5" style="color:rgba(248,250,252,0.30);">Azienda</p>
+          <ul class="space-y-3">
+            <li class="text-sm" style="color:rgba(248,250,252,0.50);">{{RAGIONE_SOCIALE}}</li>
+            <li class="text-sm" style="color:rgba(248,250,252,0.50);">
+              <span class="block text-xs" style="color:rgba(248,250,252,0.30);">Sede legale</span>
+              {{SEDE_LEGALE}}
+            </li>
+            <li class="text-sm" style="color:rgba(248,250,252,0.50);">P.IVA {{P_IVA}}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4"
+        style="border-top:1px solid rgba(248,250,252,0.07);">
+        <p class="text-xs" style="color:rgba(248,250,252,0.25);">© 2026 {{RAGIONE_SOCIALE}} — Tutti i diritti riservati.</p>
+        <div class="flex items-center gap-6">
+          <a href="{{PRIVACY_POLICY_URL}}"
+            class="text-xs transition-colors hover:text-white"
+            style="color:rgba(248,250,252,0.25);" title="Privacy Policy">Privacy Policy</a>
+          <a href="{{COOKIE_POLICY_URL}}"
+            class="text-xs transition-colors hover:text-white"
+            style="color:rgba(248,250,252,0.25);" title="Cookie Policy">Cookie Policy</a>
+          <a href="{{TERMINI_URL}}"
+            class="text-xs transition-colors hover:text-white"
+            style="color:rgba(248,250,252,0.25);" title="Termini e Condizioni">Termini e Condizioni</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BARRA FISSA MOBILE -->
+  <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 grid grid-cols-2" style="box-shadow:0 -2px 12px rgba(42, 44, 48,0.20);">
+    <a href="tel:{{TELEFONO}}" data-cta="sticky-mobile"
+      class="flex items-center justify-center gap-2 h-16 font-black uppercase tracking-wide" style="background:#5E8E25; color:#f8fafc;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+      Chiama
+    </a>
+    <a href="#form" class="flex items-center justify-center gap-2 h-16 font-black uppercase tracking-wide"
+      style="background:#1688BA; color:#f8fafc;">
+      Prenota
+    </a>
+  </div>
+
+
+</body>
+
+</html>
