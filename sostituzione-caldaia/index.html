@@ -7,13 +7,22 @@
 
   <!--
     PRIMA DI PUBBLICARE: compilare i placeholder {{...}} (trova/sostituisci sulla cartella sostituzione-caldaia/),
-    il form GHL va ancora inserito (vedi blocco FORM).
+    il form GHL è già collegato.
     Testi: documento "LANDING L1 — PAGINA MADRE SOSTITUZIONE". I blocchi segnati ⚠️ COMPLIANCE non vanno pubblicati finché non sono compilati.
   -->
 
   <script src="/js/bs-tracking.js"></script>
 
-  <!-- Google Tag Manager: incollare qui lo snippet <head> del contenitore GTM ({{GTM_ID}}) -->
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-W7L9M2J6');</script>
+  <!-- End Google Tag Manager -->
 
   <title>Sostituzione caldaia e sistemi ibridi — Prenota il sopralluogo | Sei Energy</title>
   <meta name="description" content="Prima di dirti quanto costa cambiare la caldaia, veniamo a vedere cosa hai in casa. Sopralluogo senza impegno, quattro soluzioni a confronto con prezzo chiavi in mano e limiti dichiarati.">
@@ -203,7 +212,10 @@
 
 <body class="font-brand pb-16 md:pb-0" style="background:#f8fafc; color:#2A2C30; overflow-wrap:anywhere;">
 
-  <!-- Google Tag Manager (noscript): incollare qui lo snippet <body> del contenitore GTM ({{GTM_ID}}) -->
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W7L9M2J6" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -759,15 +771,23 @@
         <span class="text-xs font-semibold tracking-widest uppercase" style="color:rgba(42, 44, 48,0.40);">Oppure compila il modulo</span>
         <div class="flex-1" style="border-top:1px solid rgba(42, 44, 48,0.12);"></div>
       </div>
-      <!-- FORM GHL: da inserire. Incollare l'iframe del form dentro #ghl-form, al posto di questo commento.
+      <!-- Iframe GHL (form cFP0WZmazpChBOUwpIfT).
            Redirect dopo l'invio: https://{{DOMINIO}}/sostituzione-caldaia/grazie/?lead=ok (fa scattare generate_lead)
          Campi da configurare in GHL (documento, blocco CTA e form):
          Nome* [testo] · Cellulare* [tel] · Email [email] · CAP* [numero]
          Che tipo di casa?* [select]: Appartamento in condominio / Villetta o casa indipendente / Villetta a schiera / Altro
          Quanti anni ha la caldaia attuale?* [select]: Meno di 5 / Da 5 a 10 / Da 10 a 15 / Più di 15 / Non lo so
          Consenso (non pre-spuntato): Ho letto l'informativa privacy e acconsento al trattamento dei dati per essere ricontattato.* -->
-      <div id="ghl-form" class="reveal" style="border:1px solid rgba(42, 44, 48,0.09); border-radius:4px; overflow:hidden; background:#ffffff; min-height:762px;">
-        <!-- iframe del form GHL -->
+      <div id="ghl-form" class="reveal" style="border:1px solid rgba(42, 44, 48,0.09); border-radius:4px; overflow:hidden; background:#ffffff;">
+        <iframe src="https://api.leadconnectorhq.com/widget/form/cFP0WZmazpChBOUwpIfT"
+          style="width:100%; height:762px; border:none; display:block;" id="inline-cFP0WZmazpChBOUwpIfT"
+          data-layout="{'id':'INLINE'}" data-trigger-type="alwaysShow" data-trigger-value=""
+          data-activation-type="alwaysActivated" data-activation-value="" data-deactivation-type="neverDeactivate"
+          data-deactivation-value="" data-form-name="6energy/sostituzione-caldaia" data-height="762"
+          data-layout-iframe-id="inline-cFP0WZmazpChBOUwpIfT" data-form-id="cFP0WZmazpChBOUwpIfT"
+          data-cookie-consent="true" data-cookie-consent-provider="auto"
+          title="6energy/sostituzione-caldaia">
+        </iframe>
       </div>
       <!-- form_embed.js viene caricato da /js/bs-tracking.js (solo se in pagina c'è un iframe GHL) dopo aver aggiunto i parametri UTM -->
     </div>
